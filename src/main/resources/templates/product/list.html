@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Product List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+<h1 class="mb-4">Products</h1>
+<table class="table table-striped">
+    <thead class="table-dark">
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th sec:authorize="hasRole('ADMIN')">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.price_in_cents}"></td>
+        <td sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/product/edit/{id}(id=${product.id})}" class="btn btn-warning btn-sm">Edit</a>
+            <form th:action="@{/product/delete/{id}(id=${product.id})}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="mt-4">
+    <a sec:authorize="hasRole('ADMIN')" href="/product/add" class="btn btn-primary">Add Product</a>
+    <a sec:authorize="hasRole('ADMIN')" href="../admin/menu" class="btn btn-secondary">Back to Menu</a>
+    <a href="/user/logout" class="btn btn-secondary">Logout</a>
+</div>
+</body>
+</html>
